@@ -102,8 +102,6 @@ g_excludessdomain=()
 g_organizationName = ("Google Inc",)
 g_blackiplist = ("216.255.",)
 
-ip_str_list = open("ip1.csv", "r+").read()
-
 
 "是否自动删除记录查询成功的非google的IP文件，方便下次跳过连接，0为不删除，1为删除"
 "文件名：ip_tmpno.txt，格式：ip 连接与握手时间 ssl域名"
@@ -637,19 +635,13 @@ class RamdomIP(threading.Thread):
                 linecnt = 0
                 for line in fp:
                     data = line.strip("\r\n")
-                    if data == '@default':
-                        iplineslist.extend(re.split("\r|\n", ip_str_list.strip("\r\n")))
-                        loaddefaultip = True
-                    else:
-                        iplineslist.append(data)
-                        linecnt += 1
+                    iplineslist.append(data)
+                    linecnt += 1
                 fp.close()
                 PRINT("load extra ip ok,line:%d,load default ip: %d" % (linecnt,loaddefaultip))
             except Exception as e:
                 PRINT("load extra ip file error:%s " % str(e) )
                 sys.exit(1)
-        else:
-            iplineslist.extend(re.split("\r|\n", ip_str_list.strip("\r\n")))
         for iplines in iplineslist:
             if len(iplines) == 0 or iplines[0] == '#':
                 continue
@@ -996,25 +988,8 @@ def move_over(file, i):
 
 def main():
     g_maxthreads = 50
-    files = os.listdir(g_pardir)
-    files.sort()
-    i = j = 0
-    n = len(files)
     global g_googleipfile
-    for item in files:
-        j += 1
-        if "googleip-" in item:
-            i = re.findall(r'([0-9]+)',item)[0]
-            g_googleipfile = os.path.join(g_pardir, "googleip-%s.txt" % i)
-            evt_ipramdomend.clear()
-            print "\n", "="*80, "\nbegin check googleip-%s.txt" % i
-            list_ping(g_googleipfile, g_maxthreads)
-            if os.path.exists(g_tmpokfile): move_over(g_tmpokfile, i)
-            if os.path.exists(g_tmpnofile): move_over(g_tmpnofile, i)
-            if os.path.exists(g_tmperrorfile): move_over(g_tmperrorfile, i)
-            if os.path.exists("googleip-%s.txt" % i): os.remove("googleip-%s.txt" % i)
-        elif j == n and i == 0:
-            list_ping(g_googleipfile, g_maxthreads)
+    list_ping(g_googleipfile, g_maxthreads)
 
 
 if __name__ == '__main__':
