@@ -1,0 +1,6 @@
+74.125.1.8 678 *.c.docs.google.com
+168.253.97.25 874 *.googlevideo.com
+216.58.219.87 882 google.com
+74.125.154.41 1053 *.c.docs.google.com
+74.125.165.217 1105 *.c.docs.google.com
+210.187.22.154 1302 *.googlevideo.com
