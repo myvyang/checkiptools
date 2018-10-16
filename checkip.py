@@ -995,12 +995,7 @@ def move_over(file, i):
 
 
 def main():
-    thread = raw_input("Please type max threads(default 50):")
-    thread = thread.replace(" ","")
-    if thread.isdigit():
-        g_maxthreads = int(thread)
-    else:
-        g_maxthreads = 50
+    g_maxthreads = 50
     files = os.listdir(g_pardir)
     files.sort()
     i = j = 0
